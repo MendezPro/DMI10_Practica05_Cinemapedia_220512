@@ -1,8 +1,22 @@
-
 import 'package:cinemapedia_220472/infrastructure/models/moviedb/movie_moviedb.dart';
 import 'package:cinemapedia_220472/domain/entities/movie.dart';
-
+/// Mapper que convierte modelos de datos externos a entidades de dominio.
+/// 
+/// Se encarga de transformar objetos MovieMovieDB (de la API) a objetos Movie 
+/// (entidad de dominio), aplicando transformaciones necesarias como URLs completas.
+///
 class MovieMapper {
+   /// Convierte un objeto MovieMovieDB a una entidad Movie del dominio.
+  /// 
+  /// **Transformaciones aplicadas:**
+  /// - Construye URLs completas para imágenes (backdrop y poster)
+  /// - Proporciona imágenes por defecto si no existen
+  /// - Mantiene todos los demás campos sin modificación
+  /// 
+  /// **Parámetros:**
+  /// - `moviedb`: Modelo de datos de la API de TheMovieDB
+  /// 
+  /// **Retorna:** Entidad Movie lista para usar en el dominio
   static Movie movieDBToEntity(MovieMovieDB moviedb) => Movie(
       adult: moviedb.adult,
       backdropPath: (moviedb.backdropPath != '') 
