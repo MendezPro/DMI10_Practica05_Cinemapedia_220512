@@ -1,4 +1,5 @@
 
+import 'package:cinemapedia_220472/presentation/providers/movies/movie_slideshow_provider.dart' show movieSlideshowProvider;
 import 'package:cinemapedia_220472/presentation/providers/movies/movies_providers.dart';
 import 'package:cinemapedia_220472/presentation/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +21,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: _HomeView(),
+      bottomNavigationBar: CustomButtonNavigationbar(),
     );
   }
 }
@@ -49,13 +51,15 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   @override
   Widget build(BuildContext context){
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
-    
+    final slideShowMovies = ref.watch(movieSlideshowProvider);
     return Column(
-      
       children: [
       CustomAppbar(),
-        MovieSlidershow(movies: nowPlayingMovies),
-      
+        MovieSlidershow(movies: slideShowMovies),
+        MovieHorizontalListview(movies: nowPlayingMovies,
+        title: 'En cines',
+        subTitle: 'Miercoles, 27 de Octubre',
+        ),
       ]
   );
   }
