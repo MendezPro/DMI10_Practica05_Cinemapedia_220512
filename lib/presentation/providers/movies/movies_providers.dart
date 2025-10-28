@@ -3,17 +3,20 @@ import 'package:cinemapedia_220472/presentation/providers/movies/movies_reposito
 import 'package:flutter_riverpod/legacy.dart';
 
 /// Provider que gestiona el estado de películas en cartelera usando Riverpod.
-/// 
+///
 /// Proporciona una lista reactiva de películas que se actualiza automáticamente
 /// cuando se cargan nuevas páginas, implementando paginación infinita.
-final nowPlayingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref){
-   /// Obtiene la función para cargar películas desde el repositorio
-  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getNowPlaying;
+// StateNotifierProvider permite manejar estados complejos que cambian con el tiempo
+// Escucha cambios y notifica a los widgets que dependen de este provider
+final nowPlayingMoviesProvider =
+    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+      /// Obtiene la función para cargar películas desde el repositorio
+      // ref.watch permite escuchar cambios en movieRepositoryProvider
+      // y obtiene el método getNowPlaying para cargar películas
+      final fetchMoreMovies = ref.watch(movieRepositoryProvider).getNowPlaying;
 
-  return MoviesNotifier(
-    fetchMoreMovies: fetchMoreMovies
-  );
-});
+      return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+    });
 
 /// Definición del tipo de función para cargar películas
 /// Recibe número de página y retorna lista de películas
@@ -21,20 +24,23 @@ typedef MovieCallback = Future<List<Movie>> Function({int page});
 
 /// Notifier que maneja el estado y lógica de carga de películas.
 class MoviesNotifier extends StateNotifier<List<Movie>> {
+  // Contador que rastrea la página actual para paginación infinita
   int currentPage = 0;
   MovieCallback fetchMoreMovies;
 
-  MoviesNotifier({
-    required this.fetchMoreMovies
-  }) : super([]);
-   /// Carga la siguiente página de películas y las agrega al estado actual.
-  /// 
+  // super([]) inicializa el estado con una lista vacía
+  MoviesNotifier({required this.fetchMoreMovies}) : super([]);
+
+  /// Carga la siguiente página de películas y las agrega al estado actual.
+  ///
   /// **Funcionalidad:**
   /// - Incrementa contador de página
-  /// - Obtiene nuevas películas de esa página  
+  /// - Obtiene nuevas películas de esa página
   Future<void> loadNextPage() async {
     currentPage++;
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
-    state = [...state, ...movies];// Spread operator para combinar listas
+    // El operador spread (...) combina la lista actual con las nuevas películas
+    // state = actualiza automáticamente todos los listeners del provider
+    state = [...state, ...movies]; // Spread operator para combinar listas
   }
 }
