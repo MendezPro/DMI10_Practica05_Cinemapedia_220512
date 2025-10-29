@@ -1,5 +1,5 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:cinemapedia_220472/domain/entities/movie.dart';
+import 'package:cinemapedia_220512/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
 /// Widget que muestra un carrusel de imágenes de películas.

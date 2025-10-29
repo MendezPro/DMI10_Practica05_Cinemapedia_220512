@@ -1,6 +1,6 @@
-import 'package:cinemapedia_220472/presentation/providers/movies/movies_providers.dart';
+import 'package:cinemapedia_220512/presentation/providers/movies/movies_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cinemapedia_220472/domain/entities/movie.dart';
+import 'package:cinemapedia_220512/domain/entities/movie.dart';
 
 // Provider que filtra y retorna solo las primeras 6 películas para el slideshow
 // Se recalcula automáticamente cuando nowPlayingMoviesProvider cambia
