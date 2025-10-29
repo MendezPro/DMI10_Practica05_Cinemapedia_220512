@@ -60,19 +60,55 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(movieSlideshowProvider);
-    return Column(
-      children: [
-        CustomAppbar(),
-        MovieSlidershow(movies: slideShowMovies),
-        MovieHorizontalListview(
-          movies: nowPlayingMovies,
-          title: 'En cines',
-          subTitle: currentFormattedDate,
-          loadNextPage: () {
-            print('Evento lanzado por el listener de HorizontalListView');
-          },
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          CustomAppbar(),
+          MovieSlidershow(movies: slideShowMovies),
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'En cines',
+            subTitle: 'Miercoles, 22 Octubre',
+            loadNextPage: () {
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+            },
+          ),
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'Proximamente',
+            subTitle: 'Noviembre',
+            loadNextPage: () {
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+            },
+          ),
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'Populares',
+            subTitle: 'Te gustarán',
+            loadNextPage: () {
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+            },
+          ),
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'Mejor Calificadas',
+            subTitle: 'De las top',
+            loadNextPage: () {
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+            },
+          ),
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'Mexicanas',
+            subTitle: 'Las mejores',
+            loadNextPage: () {
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+            
+            },
+          ),
+          const SizedBox(height: 10)
+        ],
+      ),
     );
   }
 }
