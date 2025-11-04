@@ -6,9 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+ 
+/// Pantalla principal de la aplicación que muestra las películas en cartelera.
+
 
 /// Pantalla principal de la aplicación que muestra las películas en cartelera.
-///
+/// 
 /// **Funcionalidades:**
 /// - Lista de películas actualmente en cines
 /// - Carga automática de datos al iniciar
@@ -29,7 +32,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 /// Vista interna que maneja el estado y la lógica de la pantalla principal.
-///
+/// 
 /// **Responsabilidades:**
 /// - Cargar películas al inicializar la pantalla
 /// - Escuchar cambios en el provider de películas
@@ -47,9 +50,13 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     super.initState();
     initializeDateFormatting('es_ES', null);
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
+    ref.read(mexicanMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
   }
 
-  /// ✅ Función para obtener la fecha actual formateada
+    /// ✅ Función para obtener la fecha actual formateada
   String get currentFormattedDate {
     final now = DateTime.now();
     final formatter = DateFormat('EEEE, d \'de\' MMMM', 'es_ES');
@@ -57,58 +64,60 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(movieSlideshowProvider);
+    final popular = ref.watch(popularMoviesProvider);
+    final topRated = ref.watch(topRatedMoviesProvider);
+    final upcomingMovies = ref.watch(upcomingMoviesProvider);
+    final mexicanMovies = ref.watch(mexicanMoviesProvider);
     return SingleChildScrollView(
       child: Column(
         children: [
-          CustomAppbar(),
+        CustomAppbar(),
           MovieSlidershow(movies: slideShowMovies),
-          MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'En cines',
-            subTitle: 'Miercoles, 22 Octubre',
-            loadNextPage: () {
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            },
+          MovieHorizontalListview(movies: nowPlayingMovies,
+          title: 'En cines',
+          subTitle: currentFormattedDate,
+          loadNextPage: () =>
+            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
           ),
+      
           MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'Proximamente',
-            subTitle: 'Noviembre',
-            loadNextPage: () {
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            },
+          movies: upcomingMovies,
+          title: 'Proximamente',
+          subTitle: currentFormattedDate,
+          loadNextPage: () =>
+            ref.read(upcomingMoviesProvider.notifier).loadNextPage()
           ),
+      
           MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'Populares',
-            subTitle: 'Te gustarán',
-            loadNextPage: () {
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            },
+          movies: popular,
+          title: 'Populares',
+          subTitle: currentFormattedDate,
+          loadNextPage: () =>
+            ref.read(popularMoviesProvider.notifier).loadNextPage()
           ),
+      
           MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'Mejor Calificadas',
-            subTitle: 'De las top',
-            loadNextPage: () {
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            },
+          movies: topRated,
+          title: 'Mejor valoradas',
+          subTitle: currentFormattedDate,
+          loadNextPage: () =>
+            ref.read(topRatedMoviesProvider.notifier).loadNextPage()
           ),
+      
           MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'Mexicanas',
-            subTitle: 'Las mejores',
-            loadNextPage: () {
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            
-            },
+          movies: mexicanMovies,
+          title: 'Cine Mexicano',
+          subTitle: currentFormattedDate,
+          loadNextPage: () =>
+            ref.read(mexicanMoviesProvider.notifier).loadNextPage()
           ),
+
           const SizedBox(height: 10)
-        ],
-      ),
+        ]
+        ),
     );
   }
 }
